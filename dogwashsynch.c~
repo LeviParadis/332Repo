@@ -6,7 +6,7 @@
 //initializes locks and variables returns 0 for sucess and -1 for faliure
 int dogwash_init(int numbays)
 {
-    printf("Initializing dog bay \n");
+    printf("Initializing dog bay");
     dogwash *d = malloc(sizeof(dogwash));
     d->curnumbays = 0;
     d->totaldogs = 0;
@@ -22,7 +22,7 @@ int dogwash_init(int numbays)
 int newdog(dogtype dog)
 {
     
-    printf("Dog is now being washed \n ");
+    printf("%s\n", "Dog is now being washed \n ");
     return 0;
 }
 // called when dog is done being washed, returns after dog is removed
