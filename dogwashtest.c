@@ -7,19 +7,25 @@
 #include "dogwashsynch.h"
 #include <pthread.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #define NUM_DOGS 10
 
-typedef struct arglist{
-	dogwash *dogWashTrack;
-	int dogtypes[NUM_DOGS]= {DA,DA,DA,DB,DB,DO,DB,DA,DA,DO};
-}
-void *dog(void* d, void* dogtype type){
- dogwash_init(11,d);
-  newdog(DA,d); 
+static const dogtype mixBreeds[] = {DA,DB,DB,DA,DO,DO,DA,DB,DA,DA};
+
+
+typedef struct myarg{
+    dogwash *dogWashStats;
+    dogtype dogTypeArray[NUM_DOGS];
+    int threadID;
+    
+} myarg;
+void *dog(void* args){
+  myarg *d = (myarg *) args;
+  dogwash_init(11,d->dogWashStats);
+  newdog(d->dogTypeArray[d->threadID],d->dogWashStats); 
   sleep(10); 
-  dogdone(DA,d);
+  dogdone(d->dogTypeArray[d->threadID],d->dogWashStats);
   pthread_exit(NULL);
 }
 /*
@@ -28,14 +34,19 @@ void *dog(void* d, void* dogtype type){
 int main(int argc, char** argv) {
     pthread_t p[NUM_DOGS]; // TODO: Make this a thread of multiple dogs
     int rc;
-    arglist.dogWashTrack = malloc(sizeof(dogwash));
+    myarg arglist;
+    arglist.dogWashStats = malloc(sizeof(dogwash));
+    //copying static defined array to the dogtype array;
+    memcpy(arglist.dogTypeArray,mixBreeds,sizeof(arglist.dogTypeArray));
     long i;
     for(i =0; i < NUM_DOGS; i++){
-    rc = pthread_create(&p[i],NULL, dog, &arglist);
-    if (rc){
-    printf("ERROR; return code from pthread_create() is %d\n", rc);
-    exit(-1);
-    }
+        arglist.threadID = i;
+        rc = pthread_create(&p[i],NULL, dog, &arglist);
+    
+        if (rc){
+        printf("ERROR; return code from pthread_create() is %d\n", rc);
+        exit(-1);
+        }
     }
     pthread_exit(NULL);
 }
