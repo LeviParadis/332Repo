@@ -9,21 +9,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void *dog(){
-  newdog(DA); 
+void *dog(void *d){
+  newdog(DA,d); 
  //Sleep 
-  dogdone(DA);
+  dogdone(DA,d);
   pthread_exit(NULL);
 }
 /*
  * 
  */
 int main(int argc, char** argv) {
-    dogwash_init(10);
-    pthread_t p;
+    dogwash *dogWashTrack = malloc(sizeof(dogwash));
+    dogwash_init(10,dogWashTrack);
+    pthread_t p; // TODO: Make this a thread of multiple dogs
     int rc;
     dogtype dog1;
-    rc = pthread_create(&p,NULL, dog,NULL);
+    rc = pthread_create(&p,NULL, dog,(void*)dogWashTrack);
     
     pthread_exit(NULL);
 }

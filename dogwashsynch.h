@@ -16,7 +16,9 @@ typedef struct dogwash{
     int dogAs;
     int dogBs;
     int dogOs;
+    int totalbays;
 } dogwash;
+
 
 #endif	/* DOGWASHSYNCH_H */
 
