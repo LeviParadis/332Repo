@@ -29,7 +29,7 @@ int newdog(dogtype dogToWash, dogwash *d)
     while (d->curnumbays > d->totalbays);
     {
         printf("Waiting for bays to be open..\n");
-       // pthread_cond_wait(&cond,&lock);
+        pthread_cond_wait(&cond,&lock);
     }
     printf("A bay was open checking dog types...\n");
     switch(dogToWash)
@@ -38,13 +38,16 @@ int newdog(dogtype dogToWash, dogwash *d)
             while(d->dogBs > 0)
             {
                 printf("There is a DB dog in the wash, waiting...\n");
+                pthread_cond_wait(&cond,&lock);
             }
             break;
         case  DB:
            while(d->dogAs > 0)
             {
                printf("There is a DA dog in the wash, waiting...\n");
-            }
+               pthread_cond_wait(&cond,&lock);
+           }        
+
            break;
     }   
     
@@ -73,15 +76,16 @@ int dogdone(dogtype dogToWash,dogwash *d)
     {
             case DA:
                 d->dogAs--;
-               // pthread_cond_signal(&cond);
+               pthread_cond_signal(&cond);
                 break;
             case DB:
                 d->dogBs--;
-               // pthread_cond_signal(&cond);
+               pthread_cond_signal(&cond);
                 break;
     //No DO case unless a reason to make one arises
     }
     printf("Dog is now done being washed, GO HOME! \n");
+    d->curnumbays--;
     return 0;
 }
 //Called when data clean up is required, destroys locks
