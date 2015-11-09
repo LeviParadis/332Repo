@@ -8,7 +8,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#define NUM_DOGS 10
 void *dog(void* d){
  dogwash_init(11,d);
   newdog(DA,d); 
@@ -21,11 +21,16 @@ void *dog(void* d){
  */
 int main(int argc, char** argv) {
     dogwash *dogWashTrack = malloc(sizeof(dogwash));
-    pthread_t p; // TODO: Make this a thread of multiple dogs
+    pthread_t p[NUM_DOGS]; // TODO: Make this a thread of multiple dogs
     int rc;
-    dogtype dog1;
-    rc = pthread_create(&p,NULL, dog, (void*)dogWashTrack);
-    
+    long i;
+    for(i =0; i < NUM_DOGS; i++){
+    rc = pthread_create(&p[i],NULL, dog, (void*)dogWashTrack);
+    if (rc){
+    printf("ERROR; return code from pthread_create() is %d\n", rc);
+    exit(-1);
+    }
+    }
     pthread_exit(NULL);
 }
 

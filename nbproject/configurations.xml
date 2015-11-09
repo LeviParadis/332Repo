@@ -38,7 +38,7 @@
       </toolsSet>
       <compileType>
         <cTool>
-          <commandLine>-lpthread -pthread</commandLine>
+          <commandLine>-pthread</commandLine>
         </cTool>
       </compileType>
       <item path="dogwashsynch.c" ex="false" tool="0" flavor2="0">
