@@ -22,7 +22,7 @@ typedef struct myarg{
 } myarg;
 void *dog(void* args){
   myarg *d = (myarg *) args;
-  dogwash_init(11,d->dogWashStats);
+  printf ("Hi my thread ID is %d\n",d->threadID);
   newdog(d->dogTypeArray[d->threadID],d->dogWashStats); 
   sleep(10); 
   dogdone(d->dogTypeArray[d->threadID],d->dogWashStats);
@@ -32,10 +32,12 @@ void *dog(void* args){
  * 
  */
 int main(int argc, char** argv) {
+
     pthread_t p[NUM_DOGS]; // TODO: Make this a thread of multiple dogs
     int rc;
     myarg arglist;
     arglist.dogWashStats = malloc(sizeof(dogwash));
+    dogwash_init(11,arglist.dogWashStats);
     //copying static defined array to the dogtype array;
     memcpy(arglist.dogTypeArray,mixBreeds,sizeof(arglist.dogTypeArray));
     long i;
