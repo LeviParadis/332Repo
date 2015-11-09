@@ -8,11 +8,17 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#define NUM_DOGS 10
 
-void *dog(d){
+typedef struct arglist{
+	dogwash *dogWashTrack;
+	int dogtypes[NUM_DOGS];
+}
+void *dog(void* d, void* dogtype type){
  dogwash_init(11,d);
   newdog(DA,d); 
- //Sleep 
+  sleep(10); 
   dogdone(DA,d);
   pthread_exit(NULL);
 }
@@ -20,12 +26,18 @@ void *dog(d){
  * 
  */
 int main(int argc, char** argv) {
-    dogwash *dogWashTrack = malloc(sizeof(dogwash));
-    pthread_t p; // TODO: Make this a thread of multiple dogs
+    pthread_t p[NUM_DOGS]; // TODO: Make this a thread of multiple dogs
     int rc;
-    dogtype dog1;
-    rc = pthread_create(&p,NULL, dog, (void*)dogWashTrack);
-    
+    arglist.dogWashTrack = malloc(sizeof(dogwash));
+    long i;
+    arglist.dogtypes[]={DA,DA,DA,DB,DB,DO,DB,DA,DA,DO};
+    for(i =0; i < NUM_DOGS; i++){
+    rc = pthread_create(&p[i],NULL, dog, &arglist);
+    if (rc){
+    printf("ERROR; return code from pthread_create() is %d\n", rc);
+    exit(-1);
+    }
+    }
     pthread_exit(NULL);
 }
 
