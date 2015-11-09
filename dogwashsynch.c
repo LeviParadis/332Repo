@@ -26,7 +26,7 @@ int dogwash_init(int numbays,dogwash *d)
 int newdog(dogtype dogToWash, dogwash *d)
 {
     pthread_mutex_lock(&lock);
-    while (d->curnumbays > d->totalbays);
+    while (d->curnumbays > d->totalbays)
     {
         printf("Waiting for bays to be open..\n");
         pthread_cond_wait(&cond,&lock);

@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void *dog(void *d){
+void *dog(void* d){
  dogwash_init(11,d);
   newdog(DA,d); 
  //Sleep 
@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
     pthread_t p; // TODO: Make this a thread of multiple dogs
     int rc;
     dogtype dog1;
-    rc = pthread_create(&p,NULL, dog,(void*)dogWashTrack);
+    rc = pthread_create(&p,NULL, dog, (void*)dogWashTrack);
     
     pthread_exit(NULL);
 }

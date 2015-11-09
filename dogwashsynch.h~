@@ -1,0 +1,24 @@
+/* 
+ * File:   dogwashsynch.h
+ * Author: ldp343
+ *
+ * Created on November 5, 2015, 1:54 PM
+ */
+
+#ifndef DOGWASHSYNCH_H
+#define	DOGWASHSYNCH_H
+
+typedef enum {DA,DB,DO} dogtype;
+
+typedef struct dogwash{
+    int curnumbays = 0;
+    int totaldogs = 0;
+    int dogAs = 0;
+    int dogBs = 0;
+    int dogOs = 0;
+    int totalbays = 1;
+} dogwash;
+
+
+#endif	/* DOGWASHSYNCH_H */
+
