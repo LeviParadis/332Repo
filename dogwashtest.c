@@ -11,28 +11,25 @@
 #include <stdlib.h>
 #define NUM_DOGS 10
 
-static const dogtype mixBreeds[] = {DA,DB,DB,DA,DO,DO,DA,DB,DA,DA};
-
+static const dogtype mixBreeds[] = {DA,DB,DO};
 
 typedef struct myarg{
     dogwash *dogWashStats;
     dogtype dogTypeArray[NUM_DOGS];
-    int threadID;
-    
 } myarg;
 void *dog(void* args){
   myarg *d = (myarg *) args;
-  printf ("Hi my thread ID is %d\n",d->threadID);
-  newdog(d->dogTypeArray[d->threadID],d->dogWashStats); 
+  //filling array with dogs
+  newdog(mixBreeds[(rand() % 3) - 1],d->dogWashStats); 
   sleep(10); 
-  dogdone(d->dogTypeArray[d->threadID],d->dogWashStats);
+  dogdone(mixBreeds[(rand() % 3) - 1],d->dogWashStats);
   pthread_exit(NULL);
 }
 /*
  * 
  */
 int main(int argc, char** argv) {
-
+    srand(time(NULL));
     pthread_t p[NUM_DOGS]; // TODO: Make this a thread of multiple dogs
     int rc;
     myarg arglist;
@@ -42,7 +39,6 @@ int main(int argc, char** argv) {
     memcpy(arglist.dogTypeArray,mixBreeds,sizeof(arglist.dogTypeArray));
     long i;
     for(i =0; i < NUM_DOGS; i++){
-        arglist.threadID = i;
         rc = pthread_create(&p[i],NULL, dog, &arglist);
     
         if (rc){
