@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 void *dog(void *d){
+ dogwash_init(11,d);
   newdog(DA,d); 
  //Sleep 
   dogdone(DA,d);
@@ -20,7 +21,6 @@ void *dog(void *d){
  */
 int main(int argc, char** argv) {
     dogwash *dogWashTrack = malloc(sizeof(dogwash));
-    dogwash_init(10,dogWashTrack);
     pthread_t p; // TODO: Make this a thread of multiple dogs
     int rc;
     dogtype dog1;
