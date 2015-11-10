@@ -15,14 +15,14 @@ static const dogtype mixBreeds[] = {DA,DB,DO};
 
 typedef struct myarg{
     dogwash *dogWashStats;
-    dogtype dogTypeArray[NUM_DOGS];
+    dogtype threadID;
 } myarg;
 void *dog(void* args){
   myarg *d = (myarg *) args;
   //filling array with dogs
-  newdog(mixBreeds[(rand() % 3) - 1],d->dogWashStats); 
+  newdog(d->threadID,d->dogWashStats); 
   sleep(10); 
-  dogdone(mixBreeds[(rand() % 3) - 1],d->dogWashStats);
+  dogdone(d->threadID,d->dogWashStats);
   pthread_exit(NULL);
 }
 /*
@@ -36,9 +36,9 @@ int main(int argc, char** argv) {
     arglist.dogWashStats = malloc(sizeof(dogwash));
     dogwash_init(5,arglist.dogWashStats);
     //copying static defined array to the dogtype array;
-    memcpy(arglist.dogTypeArray,mixBreeds,sizeof(arglist.dogTypeArray));
     long i;
     for(i =0; i < NUM_DOGS; i++){
+        arglist.threadID = mixBreeds[(rand() % 3) - 1];
         rc = pthread_create(&p[i],NULL, dog, &arglist);
     
         if (rc){
