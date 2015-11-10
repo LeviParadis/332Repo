@@ -66,13 +66,15 @@ int newdog(dogtype dogToWash, dogwash *d)
                 break;
     //No DO case unless a reason to make one arises
     }
-    d->curnumbays++;    
+    d->curnumbays++;
+    pthread_mutex_unlock(&lock);
     return 0;
 }
 // called when dog is done being washed, returns after dog is removed
 // returns 0 for success and -1 for faliure
 int dogdone(dogtype dogToWash,dogwash *d)
 {
+	pthread_mutex_lock(&lock);
         switch(dogToWash)
     {
             case DA:
@@ -83,11 +85,14 @@ int dogdone(dogtype dogToWash,dogwash *d)
                 d->dogBs--;
                pthread_cond_signal(&cond);
                 break;
+	    case DO:
+		pthread_cond_signal(&cond);
     //No DO case unless a reason to make one arises
     }
     printf("Dog is now done being washed, GO HOME! \n");
     d->curnumbays--;
-    pthread_mutex_unlock(&lock);
+    pthread_cond_signal(&cond); // signaling for bay numbers
+    pthread_mutex_unlock(&lock); 
     return 0;
 }
 //Called when data clean up is required, destroys locks

@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     int rc;
     myarg arglist;
     arglist.dogWashStats = malloc(sizeof(dogwash));
-    dogwash_init(11,arglist.dogWashStats);
+    dogwash_init(5,arglist.dogWashStats);
     //copying static defined array to the dogtype array;
     memcpy(arglist.dogTypeArray,mixBreeds,sizeof(arglist.dogTypeArray));
     long i;
