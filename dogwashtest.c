@@ -19,7 +19,6 @@ typedef struct myarg{
 } myarg;
 void *dog(void* args){
   myarg *d = (myarg *) args;
-  d->dogWashStats = malloc(sizeof(dogwash));
   d->threadID = mixBreeds[(rand() % 3) - 1];
   //filling array with dogs
   newdog(d->threadID,d->dogWashStats); 
@@ -35,7 +34,7 @@ int main(int argc, char** argv) {
     pthread_t p[NUM_DOGS]; // TODO: Make this a thread of multiple dogs
     int rc;
     myarg arglist;
-    
+    d->dogWashStats = malloc(sizeof(dogwash));
     dogwash_init(5,arglist.dogWashStats);
     //copying static defined array to the dogtype array;
     long i;
