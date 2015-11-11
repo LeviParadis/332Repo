@@ -19,6 +19,7 @@ typedef struct myarg{
 } myarg;
 void *dog(void* args){
   myarg *d = (myarg *) args;
+  d->threadID = mixBreeds[(rand() % 3) - 1];
   //filling array with dogs
   newdog(d->threadID,d->dogWashStats); 
   sleep(10); 
@@ -38,7 +39,6 @@ int main(int argc, char** argv) {
     //copying static defined array to the dogtype array;
     long i;
     for(i =0; i < NUM_DOGS; i++){
-        arglist.threadID = mixBreeds[(rand() % 3) - 1];
         rc = pthread_create(&p[i],NULL, dog, &arglist);
     
         if (rc){
