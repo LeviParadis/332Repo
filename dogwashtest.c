@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define NUM_DOGS 10
+#define NUM_DOGS 11
 
 static const dogtype mixBreeds[] = {DA,DB,DO};
 

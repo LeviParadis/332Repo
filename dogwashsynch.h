@@ -17,7 +17,6 @@ typedef struct dogwash{
     int dogBs;
     int dogOs;
     int totalbays;
-    int arrayCursor;
 } dogwash;
 
 
