@@ -26,7 +26,6 @@ int dogwash_init(int numbays,dogwash *d)
 // returns 0 for success and -1 for faliure
 int newdog(dogtype dogToWash, dogwash *d)
 {
-    d->arrayCursor++;
     pthread_mutex_lock(&lock);
     while (d->curnumbays > d->totalbays)
     {
