@@ -9,20 +9,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define NUM_DOGS 10
+#define NUM_DOGS 11
 
-static const dogtype mixBreeds[] = {DA,DB,DO};
 
-typedef struct myarg{
-    dogwash *dogWashStats;
-    dogtype dogTypeArray[NUM_DOGS];
-} myarg;
+
+
 void *dog(void* args){
-  myarg *d = (myarg *) args;
   //filling array with dogs
-  newdog(mixBreeds[(rand() % 3) - 1],d->dogWashStats); 
-  sleep(10); 
-  dogdone(mixBreeds[(rand() % 3) - 1],d->dogWashStats);
+  newdog(args); 
+  sleep(7); 
+  dogdone(args);
   pthread_exit(NULL);
 }
 /*
@@ -30,16 +26,14 @@ void *dog(void* args){
  */
 int main(int argc, char** argv) {
     srand(time(NULL));
-    pthread_t p[NUM_DOGS]; // TODO: Make this a thread of multiple dogs
+    pthread_t p[NUM_DOGS];
+    dogtype mixBreeds[] = {DA,DB,DO};
     int rc;
-    myarg arglist;
-    arglist.dogWashStats = malloc(sizeof(dogwash));
-    dogwash_init(11,arglist.dogWashStats);
+    dogwash_init(5);
     //copying static defined array to the dogtype array;
-    memcpy(arglist.dogTypeArray,mixBreeds,sizeof(arglist.dogTypeArray));
     long i;
     for(i =0; i < NUM_DOGS; i++){
-        rc = pthread_create(&p[i],NULL, dog, &arglist);
+        rc = pthread_create(&p[i],NULL, dog, (void*) mixBreeds[(rand() % 3) - 1]);
     
         if (rc){
         printf("ERROR; return code from pthread_create() is %d\n", rc);

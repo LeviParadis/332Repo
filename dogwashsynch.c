@@ -3,14 +3,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+	 struct dogwash *d = NULL;
+
     pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-    pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+    pthread_cond_t condBays = PTHREAD_COND_INITIALIZER;
+    pthread_cond_t condDogs = PTHREAD_COND_INITIALIZER;
     
 //initializes locks and variables returns 0 for sucess and -1 for faliure
-int dogwash_init(int numbays,dogwash *d)
+int dogwash_init(int numbays)
 {
  
     printf("Initializing dog bay \n");
+    d = malloc(sizeof(struct dogwash));
     d->curnumbays = 0;
     d->totaldogs = 0;
     d->dogAs = 0;
@@ -24,13 +28,13 @@ int dogwash_init(int numbays,dogwash *d)
 //Called when new dog arrives, returns when dog is being washed 
 // Takes a dogtype and a pointer to a dogwash structure as a variable
 // returns 0 for success and -1 for faliure
-int newdog(dogtype dogToWash, dogwash *d)
+int newdog(dogtype dogToWash)
 {
     pthread_mutex_lock(&lock);
     while (d->curnumbays > d->totalbays)
     {
         printf("Waiting for bays to be open..\n");
-        pthread_cond_wait(&cond,&lock);
+        pthread_cond_wait(&condBays,&lock);
     }
     printf("A bay was open checking dog types...\n");
     switch(dogToWash)
@@ -39,14 +43,14 @@ int newdog(dogtype dogToWash, dogwash *d)
             while(d->dogBs > 0)
             {
                 printf("There is a DB dog in the wash, waiting...\n");
-                pthread_cond_wait(&cond,&lock);
+                pthread_cond_wait(&condDogs,&lock);
             }
             break;
         case  DB:
            while(d->dogAs > 0)
             {
                printf("There is a DA dog in the wash, waiting...\n");
-               pthread_cond_wait(&cond,&lock);
+               pthread_cond_wait(&condDogs,&lock);
            }        
 
            break;
@@ -71,26 +75,26 @@ int newdog(dogtype dogToWash, dogwash *d)
 }
 // called when dog is done being washed, returns after dog is removed
 // returns 0 for success and -1 for faliure
-int dogdone(dogtype dogToWash,dogwash *d)
+int dogdone(dogtype dogToWash)
 {
 	pthread_mutex_lock(&lock);
         switch(dogToWash)
     {
             case DA:
                 d->dogAs--;
-               pthread_cond_signal(&cond);
+               pthread_cond_signal(&condDogs);
                 break;
             case DB:
                 d->dogBs--;
-               pthread_cond_signal(&cond);
+               pthread_cond_signal(&condDogs);
                 break;
 	    case DO:
-		pthread_cond_signal(&cond);
+		pthread_cond_signal(&condDogs);
     //No DO case unless a reason to make one arises
     }
     printf("Dog is now done being washed, GO HOME! \n");
     d->curnumbays--;
-    pthread_cond_signal(&cond); // signaling for bay numbers
+    pthread_cond_signal(&condBays); // signaling for bay numbers
     pthread_mutex_unlock(&lock); 
     return 0;
 }

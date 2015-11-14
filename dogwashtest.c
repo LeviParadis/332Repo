@@ -11,19 +11,14 @@
 #include <stdlib.h>
 #define NUM_DOGS 11
 
-static const dogtype mixBreeds[] = {DA,DB,DO};
 
-typedef struct myarg{
-    dogwash *dogWashStats;
-    dogtype threadID;
-} myarg;
+
+
 void *dog(void* args){
-  myarg *d = (myarg *) args;
-  d->threadID = mixBreeds[(rand() % 3) - 1];
   //filling array with dogs
-  newdog(d->threadID,d->dogWashStats); 
-  sleep(10); 
-  dogdone(d->threadID,d->dogWashStats);
+  newdog(args); 
+  sleep(7); 
+  dogdone(args);
   pthread_exit(NULL);
 }
 /*
@@ -31,15 +26,14 @@ void *dog(void* args){
  */
 int main(int argc, char** argv) {
     srand(time(NULL));
-    pthread_t p[NUM_DOGS]; // TODO: Make this a thread of multiple dogs
+    pthread_t p[NUM_DOGS];
+    dogtype mixBreeds[] = {DA,DB,DO};
     int rc;
-    myarg arglist;
-    arglist.dogWashStats = malloc(sizeof(dogwash));
-    dogwash_init(5,arglist.dogWashStats);
+    dogwash_init(5);
     //copying static defined array to the dogtype array;
     long i;
     for(i =0; i < NUM_DOGS; i++){
-        rc = pthread_create(&p[i],NULL, dog, &arglist);
+        rc = pthread_create(&p[i],NULL, dog, (void*) mixBreeds[(rand() % 3) - 1]);
     
         if (rc){
         printf("ERROR; return code from pthread_create() is %d\n", rc);
