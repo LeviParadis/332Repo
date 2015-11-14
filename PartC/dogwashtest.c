@@ -1,6 +1,6 @@
 /* 
- * File:   Semaphore threads
- * Author: Levi Paradis and Emmanuel Boctor
+ * File:   main.c
+ * Author: ldp343
  *
  * Created on November 5, 2015, 1:06 PM
  */
@@ -11,20 +11,16 @@
 #include <string.h>
 #include <stdlib.h>
 #define NUM_DOGS 11
+#define UNFAIR_DOGS 50
 
-static const dogtype mixBreeds[] = {DA,DB,DO};
 
-typedef struct myarg{
-    dogwash *dogWashStats;
-    dogtype threadID;
-} myarg;
+
+
 void *dog(void* args){
-  myarg *d = (myarg *) args;
-  d->threadID = mixBreeds[(rand() % 3) - 1];
   //filling array with dogs
-  newdog(d->threadID,d->dogWashStats); 
-  sleep(10); 
-  dogdone(d->threadID,d->dogWashStats);
+  newdog(args); 
+  sleep(7); 
+  dogdone(args);
   pthread_exit(NULL);
 }
 /*
@@ -32,25 +28,41 @@ void *dog(void* args){
  */
 int main(int argc, char** argv) {
     srand(time(NULL));
-    pthread_t p[NUM_DOGS]; 
-
-    sem_init(&lock,0,1); // Initializing seph to 1 so it works as a lock
-    sem_init(&condBays,0,0); // Initializing seph to 0 so it works as a condition variable
-    sem_init(&condDogs,0,0); 
+    pthread_t p[NUM_DOGS];
+    dogtype mixBreeds[] = {DA,DB,DO};
     int rc;
-    myarg arglist;
-    arglist.dogWashStats = malloc(sizeof(dogwash));
-    dogwash_init(5,arglist.dogWashStats);
-    //copying static defined array to the dogtype array;
+    dogwash_init(5);
     long i;
     for(i =0; i < NUM_DOGS; i++){
-        rc = pthread_create(&p[i],NULL, dog, &arglist); // Instead of creating pthreads
-        
+        rc = pthread_create(&p[i],NULL, dog, (void*) mixBreeds[(rand() % 3) - 1]);
+    
         if (rc){
         printf("ERROR; return code from pthread_create() is %d\n", rc);
         exit(-1);
         }
     }
+    void *status;
+    //Waiting on other threads
+    for (i = 0; i < NUM_DOGS; i++)
+    {
+        pthread_join(p[i],&status);
+    }
+    dogdone();
+    
+    //Next test
+    // 1 in 25 chances of a dog B
+    dogtype unfairBreeds[] = {DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DB};
+    dogwash_init(5);
+    pthread_t u[UNFAIR_DOGS];
+        for(i =0; i < UNFAIR_DOGS; i++){
+        rc = pthread_create(&u[i],NULL, dog, (void*) unfairBreeds[(rand() % 25) - 1]);
+    
+        if (rc){
+        printf("ERROR; return code from pthread_create() is %d\n", rc);
+        exit(-1);
+        }
+    }
+    
     pthread_exit(NULL);
 }
 
