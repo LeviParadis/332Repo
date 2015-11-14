@@ -4,8 +4,10 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-    pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-    pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+    sem_t lock;
+    sem_t condBays;
+    sem_t condDogs;
+
     
 //initializes locks and variables returns 0 for sucess and -1 for faliure
 int dogwash_init(int numbays,dogwash *d)
@@ -19,6 +21,9 @@ int dogwash_init(int numbays,dogwash *d)
     d->dogOs = 0;
     d->totalbays = numbays;
     
+    sem_init(&lock,0,1); // Initializing seph to 1 so it works as a lock
+    sem_init(&condBays,0,0); // Initializing seph to 0 so it works as a condition variable
+    sem_init(&condDogs,0,0); 
     return 0;
 }
 
@@ -31,7 +36,7 @@ int newdog(dogtype dogToWash, dogwash *d)
     while (d->curnumbays > d->totalbays)
     {
         printf("Waiting for bays to be open..\n");
-        sem_wait(&cond);
+        sem_wait(&condBays);
     }
     printf("A bay was open checking dog types...\n");
     switch(dogToWash)
@@ -40,14 +45,14 @@ int newdog(dogtype dogToWash, dogwash *d)
             while(d->dogBs > 0)
             {
                 printf("There is a DB dog in the wash, waiting...\n");
-                sem_wait(&cond);           
+                sem_wait(&condDogs);           
             }
             break;
         case  DB:
            while(d->dogAs > 0)
             {
                printf("There is a DA dog in the wash, waiting...\n");
-               sem_wait(&cond);
+               sem_wait(&condDogs);
            }        
 
            break;
@@ -79,19 +84,19 @@ int dogdone(dogtype dogToWash,dogwash *d)
     {
             case DA:
                 d->dogAs--;
-                sem_post(&cond);
+                sem_post(&condDogs);
                 break;
             case DB:
                 d->dogBs--;
-                sem_post(&cond);
+                sem_post(&condDogs);
                 break;
 	    case DO:
-                sem_post(&cond);
+                sem_post(&condDogs);
     //No DO case unless a reason to make one arises
     }
     printf("Dog is now done being washed, GO HOME! \n");
     d->curnumbays--;
-    sem_post(&cond);
+    sem_post(&condBays);
     sem_post(&lock); // "unlocks"
     return 0;
 }
