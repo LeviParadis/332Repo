@@ -4,16 +4,14 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-    sem_t lock;
-    sem_t condBays;
-    sem_t condDogs;
 
-    
 //initializes locks and variables returns 0 for sucess and -1 for faliure
 int dogwash_init(int numbays,dogwash *d)
 {
  
     printf("Initializing dog bay \n");
+
+
     d->curnumbays = 0;
     d->totaldogs = 0;
     d->dogAs = 0;
@@ -21,9 +19,7 @@ int dogwash_init(int numbays,dogwash *d)
     d->dogOs = 0;
     d->totalbays = numbays;
     
-    sem_init(&lock,0,1); // Initializing seph to 1 so it works as a lock
-    sem_init(&condBays,0,0); // Initializing seph to 0 so it works as a condition variable
-    sem_init(&condDogs,0,0); 
+
     return 0;
 }
 

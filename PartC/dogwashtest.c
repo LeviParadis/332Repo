@@ -34,6 +34,9 @@ int main(int argc, char** argv) {
     srand(time(NULL));
     pthread_t p[NUM_DOGS]; 
 
+    sem_init(&lock,0,1); // Initializing seph to 1 so it works as a lock
+    sem_init(&condBays,0,0); // Initializing seph to 0 so it works as a condition variable
+    sem_init(&condDogs,0,0); 
     int rc;
     myarg arglist;
     arglist.dogWashStats = malloc(sizeof(dogwash));

@@ -10,6 +10,11 @@
 
 typedef enum {DA,DB,DO} dogtype;
 
+    sem_t lock;
+    sem_t condBays;
+    sem_t condDogs;
+    
+
 typedef struct dogwash{
     int curnumbays;
     int totaldogs;
