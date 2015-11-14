@@ -15,9 +15,8 @@ typedef struct dogwash{
     int totaldogs;
     int dogAs;
     int dogBs;
+    int dogOs;
     int totalbays;
-    int counterDA;
-    int counterDB;
 } dogwash;
 
 
