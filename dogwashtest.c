@@ -49,12 +49,12 @@ int main(int argc, char** argv) {
     dogdone();
     
     //Next test
-    // 1 in 26 chances of a dog B
-    dogtype unfairBreeds[] = {DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DB};
+    // 1 in 25 chances of a dog B
+    dogtype unfairBreeds[] = {DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DA,DB};
     dogwash_init(5);
     pthread_t u[UNFAIR_DOGS];
         for(i =0; i < UNFAIR_DOGS; i++){
-        rc = pthread_create(&u[i],NULL, dog, (void*) unfairBreeds[(rand() % 26) - 1]);
+        rc = pthread_create(&u[i],NULL, dog, (void*) unfairBreeds[(rand() % 25) - 1]);
     
         if (rc){
         printf("ERROR; return code from pthread_create() is %d\n", rc);
