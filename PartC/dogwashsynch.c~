@@ -35,7 +35,7 @@ int dogwash_init(int numbays)
 // returns 0 for success and -1 for faliure
 int newdog(dogtype dogToWash)
 {
-    //sem_wait(&lock); // "locks"
+    sem_wait(&lock); // "locks"
     while (d->curnumbays > d->totalbays)
     {
         printf("Waiting for bays to be open..\n");
@@ -79,14 +79,13 @@ int newdog(dogtype dogToWash)
     //No DO case unless a reason to make one arises
     }
     d->curnumbays++;
-    //sem_post(&lock); //"unlocks"
     return 0;
 }
 // called when dog is done being washed, returns after dog is removed
 // returns 0 for success and -1 for faliure
 int dogdone(dogtype dogToWash)
 {
-      //  sem_wait(&lock); // "locks"
+        sem_wait(&lock); // "locks"
         switch(dogToWash)
     {
             case DA:
@@ -104,7 +103,7 @@ int dogdone(dogtype dogToWash)
     printf("Dog is now done being washed, GO HOME! \n");
     d->curnumbays--;
     sem_post(&condBays);
-    //sem_post(&lock); // "unlocks"
+    sem_post(&lock); // "unlocks"
     return 0;
 }
 //Called when data clean up is required, destroys locks
