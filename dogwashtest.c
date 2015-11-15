@@ -25,7 +25,7 @@ void *dog(void* args){
 /*
  * 
  */
-int main(int argc, char** argv) {
+int main() {
     srand(time(NULL));
     pthread_t p[NUM_DOGS];
     dogtype mixBreeds[] = {DA,DB,DO};

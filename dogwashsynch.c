@@ -52,9 +52,10 @@ int newdog(dogtype dogToWash)
             {
                printf("There is a DA dog in the wash, waiting...\n");
                pthread_cond_wait(&condDogs,&lock);
-           }        
-
-           break;
+           } 
+	   break;
+    	case DO:
+	 break;
     }   
     
     printf("Dog is now being washed \n ");
@@ -72,6 +73,11 @@ int newdog(dogtype dogToWash)
                 d->counterDA = 0; //This makes DA dogs able to enter again
                 printf("Adding a dog B to the list\n");
                 break;
+
+	    case DO:
+		d->counterDA = 0;
+		d->counterDB = 0;
+		break;
     //No DO case unless a reason to make one arises
     }
     d->curnumbays++;

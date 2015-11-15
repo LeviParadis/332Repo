@@ -11,14 +11,18 @@
 typedef enum {DA,DB,DO} dogtype;
 
 typedef struct dogwash{
-    int curnumbays = 0;
-    int totaldogs = 0;
-    int dogAs = 0;
-    int dogBs = 0;
-    int dogOs = 0;
-    int totalbays = 1;
+    int curnumbays;
+    int totaldogs;
+    int dogAs;
+    int dogBs;
+    int totalbays;
+    int counterDA;
+    int counterDB;
 } dogwash;
 
-
+int newdog(void* dogToWash);
+int dogwash_init(int numbays);
+int dogdone(void* dogToWash);
+int dogwash_done();
 #endif	/* DOGWASHSYNCH_H */
 

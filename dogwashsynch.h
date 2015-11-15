@@ -19,7 +19,5 @@ typedef struct dogwash{
     int counterDA;
     int counterDB;
 } dogwash;
-
-
 #endif	/* DOGWASHSYNCH_H */
 

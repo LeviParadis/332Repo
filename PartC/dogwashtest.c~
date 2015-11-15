@@ -19,7 +19,7 @@
 void *dog(void* args){
   //filling array with dogs
   newdog(args); 
-  sleep(2); 
+  sleep(7); 
   dogdone(args);
   pthread_exit(NULL);
 }
