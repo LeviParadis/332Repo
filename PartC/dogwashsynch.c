@@ -120,6 +120,8 @@ int dogwash_done()
     d->totalbays = 0;
     d->counterDA = 0;
     d->counterDB = 0;
-    // Destroy sems
+	sem_destroy(&lock);
+    sem_destroy(&condBays);
+	sem_destroy(&condDogs);
     return 0;
 }
